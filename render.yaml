@@ -1,0 +1,34 @@
+databases:
+  - name: nexo-db
+    databaseName: nexo
+    user: nexo
+    plan: free
+services:
+  - type: web
+    name: nexo-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./apps/api/Dockerfile
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase: {name: nexo-db, property: connectionString}
+      - key: NODE_ENV
+        value: production
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: TRUST_PROXY
+        value: "true"
+      - key: WEB_ORIGIN
+        sync: false
+      - key: API_PUBLIC_URL
+        sync: false
+  - type: web
+    name: nexo-web
+    runtime: docker
+    plan: free
+    dockerfilePath: ./apps/web/Dockerfile
+    healthCheckPath: /login
+    envVars:
+      - key: API_INTERNAL_URL
+        sync: false

@@ -1,0 +1,41 @@
+name: Nexo integration
+on: [push, pull_request]
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: nexo
+          POSTGRES_PASSWORD: ci_only_password
+          POSTGRES_DB: nexo
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U nexo -d nexo"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://nexo:ci_only_password@localhost:5432/nexo
+      WEB_ORIGIN: http://localhost:3100
+      API_PUBLIC_URL: http://localhost:4100
+      API_INTERNAL_URL: http://127.0.0.1:4100
+      COOKIE_SECURE: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci --no-fund --no-audit
+      - run: npm run db:migrate
+      - run: npm run build
+      - name: Start services
+        run: |
+          npm run start -w apps/api > /tmp/nexo-api.log 2>&1 &
+          npm run start -w apps/web > /tmp/nexo-web.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://localhost:4100/api/health && curl -fsS http://localhost:3100/login >/dev/null; then exit 0; fi
+            sleep 2
+          done
+          cat /tmp/nexo-api.log /tmp/nexo-web.log
+          exit 1
+      - run: npm test
+      - run: npm run test:migrations
