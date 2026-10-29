@@ -3,6 +3,8 @@ databases:
     databaseName: nexo
     user: nexo
     plan: free
+    postgresMajorVersion: "17"
+    ipAllowList: []
 services:
   - type: web
     name: nexo-api
