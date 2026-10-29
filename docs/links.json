@@ -1,7 +1,9 @@
 {
-  "repository":"https://github.com/Ferotuc/nexo-social",
-  "frontend":null,
-  "backend":null,
-  "swagger":null,
-  "deploymentStatus":"pending_hosting_account"
+  "repository": "https://github.com/Ferotuc/nexo-social",
+  "frontend": "https://nexo-web-ferotuc.onrender.com",
+  "backend": "https://nexo-api-ferotuc.onrender.com",
+  "swagger": "https://nexo-api-ferotuc.onrender.com/api/docs",
+  "deploymentStatus": "verified_public_https",
+  "verifiedDate": "2026-10-29",
+  "freeDatabaseExpires": "2026-11-28"
 }

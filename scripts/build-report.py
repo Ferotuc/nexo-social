@@ -74,7 +74,7 @@ add('nexo.','TitleN')
 add('Una mini red social para conectar ideas y personas.','H1N')
 add(escape(student['name']),'BodyN');add('Carné: '+escape(student['studentId']),'BodyN')
 add('Entrega: 31 de octubre de 2026.','SmallN')
-status='Despliegue público configurado; consultar enlaces y comprobaciones.' if public else 'VALIDACIÓN LOCAL COMPLETA · DESPLIEGUE PÚBLICO PENDIENTE'
+status='DESPLIEGUE HTTPS VERIFICADO / RENDER FREE / 29 OCT 2026' if public else 'VALIDACIÓN LOCAL COMPLETA · DESPLIEGUE PÚBLICO PENDIENTE'
 table([['ESTADO DEL PROYECTO'],[status]],[499]);story.append(Spacer(1,14))
 add('Objetivo','H2N')
 add('Integrar frontend, backend, datos relacionales, seguridad, documentación y tiempo real en una aplicación cliente-servidor. Nexo permite registrarse, publicar texto, conversar en comentarios, seguir personas y recibir notificaciones instantáneas.')
@@ -82,7 +82,7 @@ add('Arquitectura','H2N');story.append(Architecture())
 add('El navegador consume /api en el origen del frontend. Next.js lo reenvía al backend separado. NestJS valida la sesión y las solicitudes; PostgreSQL guarda el estado. SSE informa cambios para recuperar el estado actualizado mediante REST.','SmallN')
 
 page('01 / IMPLEMENTACIÓN','Funciones, datos y seguridad')
-table([['Capa','Implementación'],['Frontend','Next.js 16, React 19 y TypeScript; SSR de feed/perfiles/publicaciones, registro y login prerenderizados. Diseño responsive.'],['Backend','NestJS 11, API REST, DTO con validación estricta, errores coherentes y Swagger/OpenAPI.'],['Datos','PostgreSQL 17, Drizzle ORM/Kit, SQL parametrizado, restricciones y transacciones.'],['Tiempo real','SSE autenticado: likes, comentarios, seguimiento y contadores; reconexión y recuperación mediante REST.'],['Ejecución','Docker Compose: frontend, API y PostgreSQL con volumen persistente.']],[90,409])
+table([['Capa','Implementación'],['Frontend','Next.js 16, React 19 y TypeScript; SSR de feed/perfiles/publicaciones, registro y login prerenderizados. Diseño responsive.'],['Backend','NestJS 11, API REST, DTO con validación estricta, errores coherentes y Swagger/OpenAPI.'],['Datos','PostgreSQL 17, Drizzle ORM/Kit, SQL parametrizado, restricciones y transacciones.'],['Tiempo real','SSE autenticado: likes, comentarios, seguimiento y contadores; reconexión y recuperación mediante REST.'],['Ejecución','Render Free: dos servicios Docker y PostgreSQL administrado. Docker Compose para reproducción local.']],[90,409])
 add('Modelo relacional','H2N')
 add('users y sessions gestionan cuentas y acceso; posts y comments guardan el contenido; likes y follows usan claves compuestas para evitar duplicados; notifications conserva el historial de actividad por destinatario.')
 add('Dos migraciones reproducibles','H2N')
@@ -93,9 +93,9 @@ add('Alcance: publicaciones de texto, notificaciones y contadores en vivo. El ch
 
 page('02 / EVIDENCIA REAL','Feed y publicaciones')
 screenshot('01-feed-desktop.jpg',max_h=385)
-add('Figura 1. Feed de escritorio, sesión iniciada y publicación creada desde el formulario. Los datos mostrados se consultan desde PostgreSQL.','SmallN')
+add('Figura 1. Feed de escritorio, sesión iniciada y publicación pública persistida. Los datos mostrados se consultan desde PostgreSQL.','SmallN')
 add('Flujos disponibles','H2N')
-add('Creación y eliminación de publicaciones propias; feed general y de personas seguidas; likes idempotentes; comentarios y acceso a la conversación mediante enlace. Los perfiles ilustrativos se cargaron con un seed local, sin contraseñas públicas.')
+add('Creación y eliminación de publicaciones propias; feed general y de personas seguidas; likes idempotentes; comentarios y acceso a la conversación mediante enlace. Las capturas corresponden al despliegue público con dos cuentas de demostración, sin contraseñas públicas.')
 add('Renderizado y recuperación','H2N')
 add('El HTML inicial incluye publicaciones reales renderizadas en el servidor. Los cambios sociales se reflejan mediante SSE sin recargar y el estado vuelve a consultarse después de una reconexión.')
 
@@ -103,25 +103,27 @@ page('03 / EVIDENCIA REAL','Perfil y experiencia móvil')
 screenshot('02-profile-desktop.jpg',max_h=285)
 add('Figura 2. Perfil con biografía, estadísticas y publicaciones persistidas. La edición se limita al propio usuario.','SmallN')
 screenshot('03-mobile.jpg',max_h=250,max_w=230)
-add('Figura 3. Distribución responsive y navegación móvil del feed.','SmallN')
+add('Figura 3. Vista responsive del sitio público a 390 px; simulación de viewport móvil.','SmallN')
 
 page('04 / EVIDENCIA REAL','Notificaciones y documentación')
 screenshot('04-notifications.jpg',max_h=275)
 add('Figura 4. Notificaciones reales generadas por otra sesión: seguimiento, like y comentario. Permanecen disponibles después de reconectar.','SmallN')
 screenshot('05-swagger.jpg',max_h=275)
-add('Figura 5. Swagger accesible en /api/docs; el contrato JSON se publica en /api/openapi.json. Las operaciones se generan desde los controladores de NestJS.','SmallN')
+add('Figura 5. Swagger público del backend accesible en /api/docs; el contrato JSON se publica en /api/openapi.json. Las operaciones se generan desde los controladores de NestJS.','SmallN')
 
 page('05 / VERIFICACIÓN Y ENTREGA','Resultados y enlaces')
-table([['Comprobación','Resultado'],['Integración','14 comprobaciones satisfactorias: autenticación, hash y sesiones, CORS, validación, SSR, SSE, interacciones, permisos y logout.'],['Migraciones','Base temporal: esquema inicial, registro previo, evolución conservando el dato y repetición sin duplicados.'],['Persistencia','Reinicio de la aplicación conservando identificadores y contenido de las publicaciones. Ver docs/evidence/persistence.json.'],['Interfaz','Registro y publicación mediante navegador; perfiles, notificaciones y vistas de escritorio y móvil.']],[100,399])
+table([['Comprobación','Resultado'],['Integración','14 comprobaciones locales y 9 públicas satisfactorias: HTTPS, autenticación, SSR, SSE, interacciones, permisos y validación.'],['Migraciones','Base temporal: esquema inicial, registro previo, evolución conservando el dato y repetición sin duplicados.'],['Persistencia','Reinicio del backend en Render: la misma publicación conserva su identificador y contenido. Ver docs/evidence/public-verification.json.'],['Interfaz','Sesión y edición de perfil en el navegador público; feed, notificaciones, Swagger y vista responsive.']],[100,399])
 add('Repositorio de GitHub','H2N')
-repo=escape(links['repository']);add(f'<link href="{repo}" color="#294c3d">{repo}</link>')
+repo=escape(links['repository']);add(f'<link href="{repo}" color="#245ce2">{repo}</link>')
 add('Acceso local','H2N')
 for label,url in [('Frontend','http://localhost:3100'),('Backend','http://localhost:4100/api/health'),('Swagger','http://localhost:4100/api/docs')]:
-    add(f'{label}: <link href="{url}" color="#294c3d">{url}</link>','SmallN')
+    add(f'{label}: <link href="{url}" color="#245ce2">{url}</link>','SmallN')
 add('Acceso público de producción','H2N')
 for key,label in [('frontend','Frontend'),('backend','Backend'),('swagger','Swagger')]:
     url=links.get(key)
-    add(f'{label}: '+(f'<link href="{escape(url)}" color="#294c3d">{escape(url)}</link>' if url else 'pendiente de alojamiento.'),'SmallN')
+    add(f'{label}: '+(f'<link href="{escape(url)}" color="#245ce2">{escape(url)}</link>' if url else 'pendiente de alojamiento.'),'SmallN')
+if public:
+    add('Plan gratuito de presentación: la base caduca el 28 de noviembre de 2026. Los servicios pueden suspenderse por inactividad y tardar en despertar. Abrir las URLs antes de exponer.','SmallN')
 if not public:
     add('Este documento todavía no acredita el criterio de despliegue público. Falta conectar un proveedor, verificar las tres URLs externas y regenerar el PDF antes de entregarlo en Canvas. Las direcciones localhost no son accesibles públicamente.','BodyN')
 add('Configuración y reproducción','H2N')

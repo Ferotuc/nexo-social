@@ -15,9 +15,11 @@ La interfaz usa una identidad azul con fondos claros, tarjetas de mayor legibili
 | Backend local | http://localhost:4100/api/health | Ejecución local |
 | Swagger local | http://localhost:4100/api/docs | Documentación interactiva |
 | OpenAPI JSON | http://localhost:4100/api/openapi.json | Contrato generado por NestJS |
-| Frontend, backend y Swagger públicos | Pendientes de proveedor de alojamiento | **No desplegados aún** |
+| Frontend público | https://nexo-web-ferotuc.onrender.com | HTTPS verificado |
+| Backend público | https://nexo-api-ferotuc.onrender.com/api/health | API y PostgreSQL verificados |
+| Swagger público | https://nexo-api-ferotuc.onrender.com/api/docs | Documentación pública |
 
-Las direcciones localhost no son enlaces públicos de producción. El repositorio por sí solo no cumple el criterio de despliegue. El informe PDF incluido corresponde a la validación local hasta completar el alojamiento.
+Desplegado el 29 de octubre de 2026 en Render: frontend y backend Docker separados, más PostgreSQL 17 administrado. Los tres recursos usan Free. La base gratuita caduca el **28 de noviembre de 2026**; los servicios pueden suspenderse por inactividad. Abrir frontend y API antes de presentar. Las direcciones localhost son una alternativa local.
 
 ## Tecnologías y arquitectura
 
@@ -160,10 +162,10 @@ node scripts/persistence.mjs after
 
 La integración usa dos usuarios temporales propios, comprueba hash/sesiones, permisos, REST, SSR, SSE real, unicidad e interacciones; elimina sus datos al finalizar. La prueba de migraciones crea y elimina únicamente una base temporal con prefijo `nexo_verify_`. No ejecutar estas pruebas contra producción: requieren permisos de desarrollo y borran sus fixtures.
 
-Capturas y resultados se guardan en `docs/evidence`. El script `scripts/build-report.py` genera el informe con nombre y carné; mientras falte hosting, el documento indica claramente que la validación es local.
+Capturas y resultados se guardan en `docs/evidence`. El script `scripts/build-report.py` genera el informe con nombre y carné a partir de datos locales privados y enlaces públicos verificados. El PDF no se publica en el repositorio. Se aprobaron 9 comprobaciones públicas mediante `node scripts/verify-public.mjs --after-restart`, incluida persistencia después de reiniciar la API alojada. El script crea dos cuentas de demostración y sus interacciones; no elimina datos de terceros. Guarda sus credenciales solamente en `.local/` (ignorado por Git).
 
 ## Despliegue
 
-La configuración propuesta está en [docs/DEPLOY.md](docs/DEPLOY.md) y `render.yaml`. Requiere una cuenta de alojamiento y revisar el plan elegido. GitHub almacena el repositorio, pero GitHub Pages no ejecuta NestJS ni PostgreSQL.
+La configuración realizada está en [docs/DEPLOY.md](docs/DEPLOY.md) y [docs/ARQUITECTURA-PUBLICA.md](docs/ARQUITECTURA-PUBLICA.md). `render.yaml` permite reproducir la arquitectura en otra instalación; no crear recursos duplicados para esta entrega. GitHub almacena el código; Render ejecuta las aplicaciones y PostgreSQL.
 
-Antes de entregar en Canvas, sustituir el estado pendiente por las tres URLs públicas verificadas, actualizar `docs/links.json`, volver a generar el PDF y comprobar login, feed, SSE y Swagger desde otro dispositivo. No presentar las URLs locales como producción.
+README, `docs/links.json`, capturas y PDF contienen las URLs reales. Puedes abrir el frontend desde un teléfono con Internet y registrar tu cuenta. Se verificó el acceso HTTPS público y una vista responsive de 390 px; conviene ensayar también en tu teléfono antes de exponer.

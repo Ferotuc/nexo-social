@@ -21,8 +21,14 @@ Entorno: Windows, Docker Desktop, PostgreSQL 17 en volumen persistente, API Nest
 - Responsive a 390 px: sin desbordamiento horizontal; navegación y cierre de sesión visibles.
 - Swagger: documentación y OpenAPI accesibles localmente.
 
-Los usuarios ilustrativos y las interacciones de las capturas son datos de demostración locales.
+Las capturas actuales se renovaron el 29 de octubre con el sitio público en Render y dos cuentas de demostración. Los resultados locales anteriores se conservan como historial.
 
-## Pendiente
+## Verificación pública - 29 de octubre de 2026
 
-No se ha desplegado en un proveedor público: falta una cuenta de alojamiento para frontend, API y PostgreSQL. No hay URLs de producción verificadas. El repositorio GitHub no sustituye este requisito.
+Frontend: https://nexo-web-ferotuc.onrender.com
+Backend: https://nexo-api-ferotuc.onrender.com
+Swagger: https://nexo-api-ferotuc.onrender.com/api/docs
+
+Nueve comprobaciones públicas satisfactorias mediante `node scripts/verify-public.mjs --after-restart`. Se verificaron HTTPS, salud de PostgreSQL, Swagger/OpenAPI, autenticación y cookie Secure/HttpOnly, contenido SSR, SSE a través del proxy del frontend, interacciones y rechazo de operaciones inválidas/no autorizadas. Después de reiniciar la API en Render se conservó el identificador de la publicación original. El detalle está en `public-verification.json`.
+
+Capturas 01 a 05: feed, perfil, viewport móvil de 390 px, notificaciones y Swagger públicos. No se afirma una prueba física desde teléfono. Los tres servicios son Free; PostgreSQL expira el 28 de noviembre de 2026.

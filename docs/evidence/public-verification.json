@@ -1,0 +1,54 @@
+{
+  "checkedAt": "2026-10-29T21:06:09.902Z",
+  "frontend": "https://nexo-web-ferotuc.onrender.com",
+  "backend": "https://nexo-api-ferotuc.onrender.com",
+  "checks": [
+    {
+      "name": "API pública conectada a PostgreSQL",
+      "passed": true
+    },
+    {
+      "name": "Frontend HTTPS y registro público",
+      "passed": true
+    },
+    {
+      "name": "Swagger y OpenAPI públicos",
+      "passed": true
+    },
+    {
+      "name": "Sesión HTTPS con cookie HttpOnly y Secure",
+      "passed": true
+    },
+    {
+      "name": "Persistencia de la publicación después de reiniciar la API pública",
+      "passed": true
+    },
+    {
+      "name": "Publicación persistida y renderizada mediante SSR",
+      "passed": true
+    },
+    {
+      "name": "Like y notificación SSE a través del frontend público",
+      "passed": true
+    },
+    {
+      "name": "Comentarios, seguimiento y feed personalizado",
+      "passed": true
+    },
+    {
+      "name": "Permisos, validación y origen de escrituras",
+      "passed": true
+    }
+  ],
+  "persistence": {
+    "verified": true,
+    "postId": "fd503e27-ae93-4d72-a883-2eac19793183",
+    "previousCheck": "2026-10-29T21:03:28.003Z"
+  },
+  "demonstration": {
+    "postId": "fd503e27-ae93-4d72-a883-2eac19793183",
+    "author": "demo_nexo",
+    "actor": "comunidad_demo"
+  },
+  "passed": true
+}
