@@ -1,0 +1,45 @@
+{
+  "checkedAt": "2026-10-29T21:38:31.068Z",
+  "frontend": "https://nexo-web-ferotuc.onrender.com",
+  "checks": [
+    {
+      "name": "Navegación de mensajes y OpenAPI actualizados",
+      "passed": true
+    },
+    {
+      "name": "Estado En línea de otra sesión conectada",
+      "passed": true
+    },
+    {
+      "name": "Mensaje y archivos conservados después del reinicio",
+      "passed": true
+    },
+    {
+      "name": "Publicación con imagen pública y emojis",
+      "passed": true
+    },
+    {
+      "name": "Chat privado con archivo TXT y notificación SSE",
+      "passed": true
+    },
+    {
+      "name": "Descarga privada solo para participantes autenticados",
+      "passed": true
+    },
+    {
+      "name": "Lectura de mensajes y contador de pendientes",
+      "passed": true
+    },
+    {
+      "name": "Rechazo de archivos ejecutables o con extensión falsa",
+      "passed": true
+    }
+  ],
+  "resources": {
+    "postId": "494ea3b9-e813-46b8-b423-86d36e249b5e",
+    "imageId": "404c288d-ffc0-40aa-a667-1ec20ea312aa",
+    "messageId": "43bda16c-b694-4f2a-bd73-49381b69762c",
+    "privateFileId": "315c49a7-37a1-40b5-85c4-0681760c2bb9"
+  },
+  "passed": true
+}

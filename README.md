@@ -1,6 +1,6 @@
 # Nexo · Mini red social
 
-Nexo permite crear una cuenta, compartir publicaciones de texto, comentar, dar me gusta, seguir personas y consultar feeds general y personalizado. Las notificaciones de likes, comentarios y nuevos seguidores llegan mediante SSE y permanecen en PostgreSQL.
+Nexo permite crear una cuenta, compartir publicaciones con texto, emojis, imágenes y archivos, comentar, dar me gusta, seguir personas y consultar feeds general y personalizado. Las notificaciones de likes, comentarios y nuevos seguidores llegan mediante SSE y permanecen en PostgreSQL. Incluye chat privado entre dos personas, indicador En línea, mensajes leídos y adjuntos privados.
 
 Proyecto final de Desarrollo Web · Francisco Fernando Otuc Chan.
 
@@ -43,7 +43,7 @@ El navegador utiliza `/api` en el dominio del frontend. Next.js lo reenvía a la
 
 ```text
 apps/api/src/         controladores, servicio, DTO, seguridad y esquema
-apps/api/drizzle/     SQL, snapshots y diario de dos migraciones
+apps/api/drizzle/     SQL, snapshots y diario de tres migraciones
 apps/web/app/         páginas SSR, login, registro y estilos
 apps/web/components/ interfaz interactiva
 tests/               integración real y evolución de migraciones
@@ -109,7 +109,7 @@ La API aplica las migraciones al arrancar. PostgreSQL usa el volumen `nexo_data`
 
 ## Datos y migraciones
 
-Tablas: `users`, `sessions`, `posts`, `comments`, `likes`, `follows` y `notifications`.
+Tablas: `users`, `sessions`, `posts`, `comments`, `likes`, `follows`, `notifications`, `messages` y `attachments`.
 
 - Migración `0000`: usuarios, sesiones, publicaciones e interacciones, con unicidad de email/usuario y pares like/seguimiento; prohíbe auto-seguimiento.
 - Migración `0001`: agrega notificaciones persistidas, claves foráneas, restricción de tipos e índice por destinatario y fecha. No modifica ni elimina publicaciones anteriores.
@@ -121,6 +121,16 @@ npm run db:migrate
 ```
 
 Conservar SQL, snapshots y `meta/_journal.json` en Git. No editar una migración ya aplicada ni hacer cambios manuales de esquema. Para conexiones cloud, usar la configuración TLS exigida por el proveedor y no desactivar la verificación de certificados.
+
+- Migración `0002`: mensajes privados y adjuntos persistentes con claves foráneas, índices y límites de tamaño.
+
+## Chat, emojis y adjuntos
+
+Entra a **Mensajes**, busca una persona y abre su conversación. El punto verde indica una conexión SSE activa; también puedes dejar mensajes cuando la persona está desconectada. Desde un perfil puedes pulsar **Enviar mensaje**. El historial persiste y carga páginas de 50 mensajes. Los avisos de mensajes y lectura viajan únicamente a los participantes.
+
+Usa la carita para insertar emojis y el clip para adjuntar **PNG, JPG, WebP, PDF o TXT UTF-8**. Hasta **3 archivos de 2 MB** por publicación/mensaje, con cuotas de **20 MB por usuario y 100 MB compartidos**. Los bytes se guardan en PostgreSQL (`bytea`), por lo que no desaparecen al reiniciar el contenedor gratuito. Los adjuntos de publicaciones son públicos; los del chat exigen la sesión de uno de sus participantes. Se verifica contenido/extensión y se fuerzan descargas de PDF/TXT. No hay análisis antivirus ni cifrado de extremo a extremo. Para crecimiento real debe migrarse el almacenamiento a objetos y mantener la autorización del chat en el backend.
+
+Los archivos cargados pero no enviados solo son visibles para su propietario; se descartan al quitarlos y se limpian después de una hora cuando se vuelve a subir un archivo. No se aceptan SVG, HTML, ejecutables ni ZIP.
 
 ## API y documentación
 
@@ -137,6 +147,8 @@ Abrir `/api/docs` en frontend o backend y `/api/openapi.json` para el contrato. 
 | Comentarios | GET/POST `/api/posts/:id/comments`, DELETE `/api/comments/:id` |
 | Notificaciones | GET `/api/notifications`, PATCH `/api/notifications/read` |
 | Tiempo real | GET `/api/events` autenticado, `text/event-stream` |
+| Chat privado | GET `/api/chat/contacts`, GET/POST `/api/chat/:id/messages`, PATCH `/api/chat/:id/read` |
+| Archivos | POST `/api/attachments` (multipart), GET/DELETE `/api/attachments/:id` |
 
 El feed devuelve hasta 15 publicaciones por página; comentarios hasta 100 por publicación y notificaciones las 50 más recientes. La búsqueda descubre hasta 12 personas por consulta. Errores coherentes: 400 datos inválidos, 401 sin sesión, 403 sin permiso, 404 inexistente, 409 duplicado, 413 tamaño excedido y 429 exceso de solicitudes.
 
@@ -146,7 +158,7 @@ Contraseñas con scrypt y sal aleatoria; comparación en tiempo constante. Token
 
 Los likes y seguimientos son idempotentes. Cada mutación social y su notificación se guardan en una transacción; el evento se emite después del COMMIT. Cada usuario recibe solo invalidaciones de sus notificaciones. El frontend vuelve a pedir estado REST al conectar/reconectar, evita aplicar eventos duplicados como datos y cierra EventSource al desmontarse. Heartbeat cada 20 segundos y revisión de sesión cada minuto.
 
-El bus SSE es de una sola instancia. Para escalar el backend a varias réplicas hay que agregar un bus compartido (Redis Pub/Sub o equivalente). Un reinicio puede perder la emisión en tránsito, pero no la notificación persistida; al reconectar se recupera desde REST. SSE evita introducir un chat innecesario para cumplir el enunciado.
+El bus SSE es de una sola instancia. Para escalar el backend a varias réplicas hay que agregar un bus compartido (Redis Pub/Sub o equivalente). Un reinicio puede perder la emisión en tránsito, pero no la notificación persistida; al reconectar se recupera desde REST. El chat envía acciones mediante REST y recibe avisos privados por SSE; el indicador de presencia es aproximado y usa conexiones activas de una sola instancia.
 
 ## Pruebas y evidencia
 
@@ -160,9 +172,11 @@ node scripts/persistence.mjs before
 node scripts/persistence.mjs after
 ```
 
-La integración usa dos usuarios temporales propios, comprueba hash/sesiones, permisos, REST, SSR, SSE real, unicidad e interacciones; elimina sus datos al finalizar. La prueba de migraciones crea y elimina únicamente una base temporal con prefijo `nexo_verify_`. No ejecutar estas pruebas contra producción: requieren permisos de desarrollo y borran sus fixtures.
+Las dos suites de integración usan cuentas temporales propias (dos y tres usuarios), comprueba hash/sesiones, permisos, REST, SSR, SSE real, unicidad e interacciones; elimina sus datos al finalizar. La prueba de migraciones crea y elimina únicamente una base temporal con prefijo `nexo_verify_`. No ejecutar estas pruebas contra producción: requieren permisos de desarrollo y borran sus fixtures.
 
 Capturas y resultados se guardan en `docs/evidence`. El script `scripts/build-report.py` genera el informe con nombre y carné a partir de datos locales privados y enlaces públicos verificados. El PDF no se publica en el repositorio. Se aprobaron 9 comprobaciones públicas mediante `node scripts/verify-public.mjs --after-restart`, incluida persistencia después de reiniciar la API alojada. El script crea dos cuentas de demostración y sus interacciones; no elimina datos de terceros. Guarda sus credenciales solamente en `.local/` (ignorado por Git).
+
+Además se verificaron **26 resultados locales (24 casos y 2 grupos), sin fallos**, incluyendo privacidad frente a una tercera cuenta, archivos falsos/grandes, transacciones, mensajes leídos y paginación sin omisiones. La ampliación pública se comprueba con `node scripts/verify-communications.mjs`; sus evidencias están en `docs/evidence/communications-public.json`. Consultar [la revisión completa de requisitos](docs/REVISION-REQUISITOS.md).
 
 ## Despliegue
 

@@ -32,3 +32,14 @@ Swagger: https://nexo-api-ferotuc.onrender.com/api/docs
 Nueve comprobaciones públicas satisfactorias mediante `node scripts/verify-public.mjs --after-restart`. Se verificaron HTTPS, salud de PostgreSQL, Swagger/OpenAPI, autenticación y cookie Secure/HttpOnly, contenido SSR, SSE a través del proxy del frontend, interacciones y rechazo de operaciones inválidas/no autorizadas. Después de reiniciar la API en Render se conservó el identificador de la publicación original. El detalle está en `public-verification.json`.
 
 Capturas 01 a 05: feed, perfil, viewport móvil de 390 px, notificaciones y Swagger públicos. No se afirma una prueba física desde teléfono. Los tres servicios son Free; PostgreSQL expira el 28 de noviembre de 2026.
+
+## Ampliación de chat y multimedia - 29 de octubre de 2026
+
+- Compilación TypeScript y builds de ambos contenedores: correctos.
+- `npm test`: 26 resultados aprobados, cero fallos (24 casos y 2 grupos). Incluye privacidad frente a una tercera cuenta, límites y firma de archivos, autorización, transacciones, mensajes, lectura y paginación con marcas de tiempo coincidentes.
+- `npm run test:migrations`: tres migraciones aplicadas sobre una base temporal; registro previo conservado y repetición sin duplicados.
+- Render: API y frontend desplegados con el commit `ee67905`; ambas construcciones indicaron Live.
+- Prueba pública: nueve comprobaciones base y ocho de chat/multimedia, todas aprobadas. Se reinició la API desde Render y su historial de eventos confirmó el reinicio. Mensaje, identificador del adjunto y publicación con imagen se conservaron. Detalle en `communications-public.json` y `public-verification.json`.
+- Interfaz pública: selector de emojis, carga de PNG por el clip, envío desde el formulario del chat, imagen recibida, archivo TXT descargable y estado Leído.
+- Vista de chat de 390 px: contenido de 375 px, sin desbordamiento horizontal. Captura `08-chat-mobile.jpg`; escritorio y publicación con imagen en `06-public-chat.jpg` y `07-public-media.jpg`.
+- Los archivos de chat se rechazan sin una sesión participante. Se rechazaron HTML y archivos con extensión de imagen falsa. La comprobación con una tercera cuenta se realizó en el entorno local; no se accedió a conversaciones de personas reales.

@@ -27,4 +27,4 @@ No activar varias réplicas de la API mientras el bus SSE permanezca en memoria.
 
 Instalar Docker y desplegar con `docker compose --profile full up -d --build`, PostgreSQL persistido y copias de seguridad. Situar frontend y backend detrás de un proxy HTTPS (Caddy/Nginx), configurar orígenes y cookies de producción. Mantener PostgreSQL sin exposición pública; el compose lo enlaza solo a loopback. Restringir puertos API/frontend por firewall cuando el proxy resida en el mismo equipo.
 
-La aplicación guarda publicaciones de texto; no depende de almacenamiento efímero del servidor para los datos. Si se incorpora multimedia después, usar almacenamiento de objetos y validar los archivos.
+La aplicación guarda mensajes, publicaciones y adjuntos pequeños en PostgreSQL; no depende del almacenamiento efímero del contenedor. Los límites de 2 MB por archivo, 20 MB por usuario y 100 MB compartidos mantienen acotada la demostración gratuita. Un servicio permanente con archivos de mayor volumen requiere almacenamiento de objetos. La migración 0002 agrega mensajes y adjuntos sin alterar publicaciones existentes. No hace falta agregar servicios de pago para esta ampliación.

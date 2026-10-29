@@ -39,7 +39,7 @@ Ya existen frontend, backend, base relacional, hash de contraseñas, sesiones, v
 
 Se agregaron los tres servicios alojados, HTTPS administrado, variables de producción y verificación externa. PostgreSQL usa almacenamiento administrado; los datos no dependen del disco efímero de los contenedores web.
 
-No se requiere Kubernetes, otro microservicio, Redis ni un chat para cumplir esta versión del proyecto. El SSE actual usa una sola instancia de API; un bus compartido sería necesario si después se agregaran varias réplicas.
+Se agregó chat privado y adjuntos pequeños sin incorporar servicios adicionales. No se requiere Kubernetes, otro microservicio ni Redis para la instancia actual. El SSE actual usa una sola instancia de API; un bus compartido sería necesario si después se agregaran varias réplicas.
 
 ## Configuración de producción
 
@@ -65,10 +65,10 @@ El despliegue actual usa PostgreSQL 17 y tiene todas las conexiones externas blo
 |---|---|
 | Cliente-servidor con separación | Dos servicios y dos carpetas: Next.js y NestJS |
 | API REST | Endpoints `/api/auth`, `/api/users`, `/api/posts`, interacciones y notificaciones |
-| Base relacional y migraciones | PostgreSQL y dos migraciones versionadas con Drizzle |
+| Base relacional y migraciones | PostgreSQL y tres migraciones versionadas con Drizzle |
 | Registro, sesión y seguridad | scrypt, sesión revocable, cookies, DTO, permisos y control de origen |
 | Feed, perfil y publicaciones | Interfaz responsive con datos reales y SSR |
-| Interacciones sociales | Likes, comentarios y seguimiento |
+| Interacciones sociales | Likes, comentarios, seguimiento y chat privado |
 | Tiempo real | SSE autenticado y recuperación de notificaciones persistidas |
 | Documentación pública | Backend HTTPS + `/api/docs` y `/api/openapi.json` |
 | Contenedores | Dockerfile para cada aplicación |
@@ -91,6 +91,12 @@ El despliegue actual se creó manualmente desde el repositorio público. El sigu
 ## Verificación realizada
 
 El script `scripts/verify-public.mjs --after-restart` aprobó 9 comprobaciones sobre las URLs externas: salud con PostgreSQL, frontend, documentación, cookie segura, SSR, SSE entre dos sesiones, interacciones y validaciones. Tras reiniciar la API en Render, se recuperó la misma publicación con el mismo identificador. Se capturó el sitio público en escritorio y viewport móvil de 390 px. La prueba física desde un teléfono con datos móviles queda como ensayo recomendado al estudiante.
+
+## Ampliación de chat y archivos
+
+La tercera migración agrega `messages` y `attachments`. El backend entrega mensajes/archivos privados solo a sus participantes; SSE envía avisos después de confirmar la transacción. La presencia En línea depende de conexiones SSE activas y es aproximada. El historial y sus archivos sobreviven al reinicio; el estado de presencia se reconstruye al reconectar.
+
+Los adjuntos se almacenan como `bytea` en PostgreSQL con límites de 2 MB por archivo, tres por envío, 20 MB por usuario y 100 MB globales. Esto evita el disco efímero de Render y basta para la presentación. Para más volumen se debe extraer el almacenamiento a un servicio de objetos conservando la autorización privada.
 
 ## Límites gratuitos para la presentación
 
