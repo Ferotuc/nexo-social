@@ -32,7 +32,9 @@ try{
  await migrate(drizzle(pool),{migrationsFolder:source});
  console.log('OK: repetición de migraciones sin cambios ni duplicados.');
  const result=await pool.query('SELECT count(*)::int AS count FROM drizzle.__drizzle_migrations');
- assert.equal(result.rows[0].count,2);
+ assert.equal(result.rows[0].count,journal.entries.length);
+ assert.equal((await pool.query(`SELECT to_regclass('public.messages') AS name`)).rows[0].name,'messages');
+ assert.equal((await pool.query(`SELECT to_regclass('public.attachments') AS name`)).rows[0].name,'attachments');
 }finally{
  if(pool)await pool.end();
  await admin.query(`DROP DATABASE IF EXISTS "${name}"`);await admin.end();

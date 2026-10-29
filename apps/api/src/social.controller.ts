@@ -4,11 +4,12 @@ import type { Request, Response } from 'express';
 import { SocialService } from './social.service';
 import { RegisterDto, LoginDto, PostDto, CommentDto, ProfileDto, FeedQuery, SearchQuery } from './dto';
 import { settings } from './config';
+import { ChatService } from './chat.service';
 const cookie={httpOnly:true,secure:settings.secure,sameSite:'lax' as const,path:'/',maxAge:7*86400000};
 @Controller('api')
 @ApiCookieAuth('nexo_session')
 export class SocialController {
-  constructor(@Inject(SocialService) private readonly social:SocialService){}
+  constructor(@Inject(SocialService) private readonly social:SocialService,@Inject(ChatService) private readonly chat:ChatService){}
   @Get('health') @ApiTags('Sistema') @ApiOperation({summary:'Estado de la API y conexión PostgreSQL'})
   async health(){await this.social.query('SELECT 1');return {status:'ok',service:'nexo-api'};}
   @Post('auth/register') @ApiTags('Autenticación') @ApiOperation({summary:'Crear una cuenta e iniciar sesión'}) @ApiResponse({status:409,description:'Usuario o correo duplicado'})
@@ -32,7 +33,7 @@ export class SocialController {
   @Get('posts') @ApiTags('Publicaciones') @ApiOperation({summary:'Feed paginado general, de seguidos o de un perfil'})
   async feed(@Req() req:Request,@Query() q:FeedQuery){return this.social.feed((await this.social.viewer(req,false))?.id||null,q);}
   @Post('posts') @ApiTags('Publicaciones') @ApiOperation({summary:'Crear publicación de texto'})
-  async create(@Req() req:Request,@Body() dto:PostDto){return this.social.createPost(await this.social.requireViewer(req),dto.body);}
+  async create(@Req() req:Request,@Body() dto:PostDto){return this.social.createPost(await this.social.requireViewer(req),dto.body,dto.attachmentIds);}
   @Get('posts/:id') @ApiTags('Publicaciones') @ApiOperation({summary:'Consultar una publicación'})
   async post(@Param('id',new ParseUUIDPipe()) id:string,@Req() req:Request){return this.social.post(id,(await this.social.viewer(req,false))?.id||null);}
   @Delete('posts/:id') @HttpCode(204) @ApiTags('Publicaciones') @ApiOperation({summary:'Eliminar una publicación propia'})
@@ -56,10 +57,10 @@ export class SocialController {
     const user=await this.social.requireViewer(req);
     res.status(200).set({'Content-Type':'text/event-stream','Cache-Control':'no-cache, no-transform','Connection':'keep-alive','X-Accel-Buffering':'no'});res.flushHeaders();
     const send=(data:unknown)=>res.write(`data: ${JSON.stringify(data)}\n\n`);
-    send({type:'connected'});
+    send({type:'connected'});this.chat.connect(user.id);
     this.social.events.on('feed',send);this.social.events.on(`user:${user.id}`,send);
-    const heartbeat=setInterval(()=>res.write(': heartbeat\n\n'),20000);
+    const heartbeat=setInterval(()=>{this.chat.pulse(user.id);res.write(': heartbeat\n\n');},20000);
     const reauth=setInterval(()=>{void this.social.viewer(req,false).then(v=>{if(!v)res.end();}).catch(()=>res.end());},60000);
-    res.on('close',()=>{clearInterval(heartbeat);clearInterval(reauth);this.social.events.off('feed',send);this.social.events.off(`user:${user.id}`,send);});
+    res.on('close',()=>{clearInterval(heartbeat);clearInterval(reauth);this.chat.disconnect(user.id);this.social.events.off('feed',send);this.social.events.off(`user:${user.id}`,send);});
   }
 }

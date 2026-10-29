@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEmail, IsIn, IsInt, IsOptional, IsString, Length, Matches, Max, Min, MaxLength } from 'class-validator';
+import { IsEmail, IsIn, IsInt, IsOptional, IsString, Length, Matches, Max, Min, MaxLength, IsArray, ArrayMaxSize, ArrayUnique, IsUUID } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 const trim=({value}:{value:unknown})=>typeof value==='string'?value.trim():value;
 export class RegisterDto {
@@ -12,7 +12,12 @@ export class LoginDto {
   @ApiProperty({example:'francisco@example.com'}) @Transform(({value})=>typeof value==='string'?value.trim().toLowerCase():value) @IsEmail() @MaxLength(254) email!:string;
   @ApiProperty() @IsString() @Length(1,128) password!:string;
 }
-export class PostDto { @ApiProperty({maxLength:2000,example:'Hoy comparto mi primer proyecto web.'}) @Transform(trim) @IsString() @Length(1,2000) body!:string; }
+export class PostDto {
+  @ApiProperty({maxLength:2000,example:'Hoy comparto mi primer proyecto web.'}) @Transform(trim) @IsString() @Length(1,2000) body!:string;
+  @ApiPropertyOptional({type:[String],maxItems:3}) @IsOptional() @IsArray() @ArrayMaxSize(3) @ArrayUnique() @IsUUID('4',{each:true}) attachmentIds?:string[];
+}
+export class MessageDto extends PostDto {}
+export class MessageQuery { @ApiPropertyOptional({description:'Cursor de mensaje anterior para cargar historial'}) @IsOptional() @IsUUID('4') before?:string; }
 export class CommentDto { @ApiProperty({maxLength:500,example:'¡Qué buen proyecto!'}) @Transform(trim) @IsString() @Length(1,500) body!:string; }
 export class ProfileDto {
   @ApiPropertyOptional() @IsOptional() @Transform(trim) @IsString() @Length(2,60) displayName?:string;

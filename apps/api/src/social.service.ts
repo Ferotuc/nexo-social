@@ -5,6 +5,7 @@ import type { Request } from 'express';
 import { settings } from './config';
 import { hashPassword, verifyPassword, tokenHash, newToken } from './security';
 import { RegisterDto, ProfileDto, FeedQuery } from './dto';
+import { attachmentJson,claimAttachments } from './media';
 
 export type Viewer={id:string;username:string;displayName:string;bio:string;email?:string;createdAt:string};
 const publicFields=`u.id,u.username,u.display_name AS "displayName",u.bio,u.created_at AS "createdAt"`;
@@ -50,7 +51,8 @@ export class SocialService implements OnModuleDestroy {
   private postSelect=`SELECT p.id,p.body,p.created_at AS "createdAt",json_build_object('id',u.id,'username',u.username,'displayName',u.display_name) AS author,
     (SELECT count(*)::int FROM likes WHERE post_id=p.id) AS "likesCount",
     (SELECT count(*)::int FROM comments WHERE post_id=p.id) AS "commentsCount",
-    EXISTS(SELECT 1 FROM likes WHERE post_id=p.id AND user_id=$1) AS liked
+    EXISTS(SELECT 1 FROM likes WHERE post_id=p.id AND user_id=$1) AS liked,
+    COALESCE((SELECT json_agg(${attachmentJson('a')}) FROM attachments a WHERE a.post_id=p.id),'[]') AS attachments
     FROM posts p JOIN users u ON u.id=p.author_id`;
   async feed(viewerId:string|null,q:FeedQuery){
     if(q.feed==='following'&&!viewerId)throw new UnauthorizedException('Inicia sesión para ver a quienes sigues.');
@@ -58,7 +60,7 @@ export class SocialService implements OnModuleDestroy {
     return {items:rows.slice(0,15),page:q.page,hasMore:rows.length>15};
   }
   async post(id:string,viewerId:string|null){const [p]=await this.query(`${this.postSelect} WHERE p.id=$2`,[viewerId,id]);if(!p)throw new NotFoundException('La publicación no existe.');return p;}
-  async createPost(user:Viewer,body:string){const [p]=await this.query(`INSERT INTO posts(author_id,body) VALUES($1,$2) RETURNING id`,[user.id,body]);this.events.emit('feed',{type:'feed.changed',postId:p.id});return this.post(p.id,user.id);}
+  async createPost(user:Viewer,body:string,attachmentIds:string[]=[]){const p=await this.transaction(async c=>{const {rows:[p]}=await c.query(`INSERT INTO posts(author_id,body) VALUES($1,$2) RETURNING id`,[user.id,body]);await claimAttachments(c,user.id,attachmentIds,'post_id',p.id);return p;});this.events.emit('feed',{type:'feed.changed',postId:p.id});return this.post(p.id,user.id);}
   async deletePost(user:Viewer,id:string){const p=await this.post(id,user.id);if(p.author.id!==user.id)throw new ForbiddenException('Solo puedes eliminar tus publicaciones.');await this.query(`DELETE FROM posts WHERE id=$1 AND author_id=$2`,[id,user.id]);this.events.emit('feed',{type:'feed.changed',postId:id});}
   private async notification(c:PoolClient,recipientId:string,actorId:string,type:string,postId:string|null){
     if(recipientId===actorId)return;

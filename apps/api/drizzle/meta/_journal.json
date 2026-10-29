@@ -15,6 +15,13 @@
       "when": 1793217930800,
       "tag": "0001_slippery_leper_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793308987567,
+      "tag": "0002_romantic_vapor",
+      "breakpoints": true
     }
   ]
 }
