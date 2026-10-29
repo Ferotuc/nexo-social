@@ -4,6 +4,8 @@ Nexo permite crear una cuenta, compartir publicaciones de texto, comentar, dar m
 
 Proyecto final de Desarrollo Web · Francisco Fernando Otuc Chan.
 
+La interfaz usa una identidad azul con fondos claros, tarjetas de mayor legibilidad, navegación activa resaltada y diseño adaptado a móvil.
+
 ## Estado y accesos
 
 | Recurso | Dirección | Estado |

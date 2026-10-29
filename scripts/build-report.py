@@ -27,8 +27,8 @@ if (font_dir/'segoeui.ttf').exists():
     pdfmetrics.registerFont(TTFont('Segoe',str(font_dir/'segoeui.ttf')))
     pdfmetrics.registerFont(TTFont('SegoeBold',str(font_dir/'segoeuib.ttf')))
     font='Segoe'; bold='SegoeBold'
-GREEN=colors.HexColor('#294c3d'); INK=colors.HexColor('#24352f'); MUTED=colors.HexColor('#788578')
-SAGE=colors.HexColor('#edf2e9'); LINE=colors.HexColor('#dde4d8'); ORANGE=colors.HexColor('#c56d44')
+GREEN=colors.HexColor('#245ce2'); INK=colors.HexColor('#172b4d'); MUTED=colors.HexColor('#60728e')
+SAGE=colors.HexColor('#edf3ff'); LINE=colors.HexColor('#dce7f8'); ORANGE=colors.HexColor('#3278ed')
 styles=getSampleStyleSheet()
 styles.add(ParagraphStyle(name='KickerN',fontName=bold,fontSize=8,textColor=ORANGE,spaceAfter=15,leading=12))
 styles.add(ParagraphStyle(name='TitleN',fontName=bold,fontSize=38,leading=43,textColor=GREEN,spaceAfter=13))
