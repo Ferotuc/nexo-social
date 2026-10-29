@@ -2,29 +2,29 @@
 
 Revisión del 29 de octubre de 2026 contra el enunciado proporcionado por el estudiante. La cobertura indicada describe implementación y comprobaciones; no sustituye la calificación del docente.
 
-| Requisito | Estado | Evidencia |
-|---|---|---|
-| Cliente y servidor separados; REST | Implementado | `apps/web` (Next.js), `apps/api` (NestJS), controladores REST |
-| Base relacional y migraciones reproducibles | Implementado y probado | PostgreSQL 17, nueve tablas y migraciones 0000, 0001 y 0002; `tests/migrations.mjs` |
-| Registro e inicio de sesión | Implementado y probado | Sesiones revocables y cookies; pruebas de duplicados, login y logout |
-| Contraseñas protegidas | Implementado y probado | scrypt con sal individual; hashes de contraseñas y tokens persistidos |
-| Crear, ver y eliminar publicaciones | Implementado y probado | Texto/emojis y hasta tres adjuntos; permisos de propietario y borrado en cascada |
-| Likes, comentarios y seguimiento | Implementado y probado | Restricciones de unicidad, operaciones idempotentes y transacciones |
-| Feed general y personalizado | Implementado y probado | Feed paginado de comunidad y de personas seguidas |
-| Pantallas de acceso, feed y perfil | Implementado | Interfaz responsive azul; edición de perfil propio |
-| SSR o prerender recomendado | Implementado y probado | SSR de feed, perfiles y publicaciones; acceso/registro prerenderizados |
-| Frontend conectado al backend desplegado | Implementado y probado | Proxy REST y SSE de Next.js hacia API pública HTTPS |
-| Tiempo real | Implementado y probado | SSE autenticado para notificaciones, contadores, chat y lectura |
-| Validación y errores coherentes | Implementado y probado | DTO estrictos, UUID, longitudes, códigos HTTP y rechazo de campos extra |
-| CORS, origen y secretos | Implementado y probado | Orígenes explícitos, cookie Secure/HttpOnly, `.env.example`; secretos fuera de Git |
-| Swagger/OpenAPI público | Implementado y probado | [Swagger](https://nexo-api-ferotuc.onrender.com/api/docs), `/api/openapi.json`, rutas de chat/adjuntos incluidas |
-| Frontend público | Desplegado y probado | [Aplicación](https://nexo-web-ferotuc.onrender.com) en Render Free |
-| Backend público | Desplegado y probado | [Salud de API y PostgreSQL](https://nexo-api-ferotuc.onrender.com/api/health) |
-| GitHub: código, README, tecnologías y arquitectura | Disponible | [Repositorio](https://github.com/Ferotuc/nexo-social), README y `docs/ARQUITECTURA-PUBLICA.md` |
-| GitHub: variables de ejemplo y migraciones | Disponible | `.env.example` y `apps/api/drizzle/`; sin credenciales reales |
-| PDF con identidad, arquitectura, tecnologías y capturas | Generado localmente | `output/pdf/Nexo-Proyecto-Final.pdf`; no se publica el carné en GitHub |
-| PDF con enlaces a repositorio, frontend, backend y API | Incluido | Enlaces clicables en el informe de entrega |
-| Entrega del PDF en Canvas antes del 31 de octubre | A cargo del estudiante | El despliegue y el PDF no equivalen a subir la tarea a Canvas |
+| Requisito                                               | Estado                 | Evidencia                                                                                                        |
+| ------------------------------------------------------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Cliente y servidor separados; REST                      | Implementado           | `apps/web` (Next.js), `apps/api` (NestJS), controladores REST                                                    |
+| Base relacional y migraciones reproducibles             | Implementado y probado | PostgreSQL 17, nueve tablas y migraciones 0000, 0001 y 0002; `tests/migrations.mjs`                              |
+| Registro e inicio de sesión                             | Implementado y probado | Sesiones revocables y cookies; pruebas de duplicados, login y logout                                             |
+| Contraseñas protegidas                                  | Implementado y probado | scrypt con sal individual; hashes de contraseñas y tokens persistidos                                            |
+| Crear, ver y eliminar publicaciones                     | Implementado y probado | Texto/emojis y hasta tres adjuntos; permisos de propietario y borrado en cascada                                 |
+| Likes, comentarios y seguimiento                        | Implementado y probado | Restricciones de unicidad, operaciones idempotentes y transacciones                                              |
+| Feed general y personalizado                            | Implementado y probado | Feed paginado de comunidad y de personas seguidas                                                                |
+| Pantallas de acceso, feed y perfil                      | Implementado           | Interfaz responsive azul; edición de perfil propio                                                               |
+| SSR o prerender recomendado                             | Implementado y probado | SSR de feed, perfiles y publicaciones; acceso/registro prerenderizados                                           |
+| Frontend conectado al backend desplegado                | Implementado y probado | Proxy REST y SSE de Next.js hacia API pública HTTPS                                                              |
+| Tiempo real                                             | Implementado y probado | SSE autenticado para notificaciones, contadores, chat y lectura                                                  |
+| Validación y errores coherentes                         | Implementado y probado | DTO estrictos, UUID, longitudes, códigos HTTP y rechazo de campos extra                                          |
+| CORS, origen y secretos                                 | Implementado y probado | Orígenes explícitos, cookie Secure/HttpOnly, `.env.example`; secretos fuera de Git                               |
+| Swagger/OpenAPI público                                 | Implementado y probado | [Swagger](https://nexo-api-ferotuc.onrender.com/api/docs), `/api/openapi.json`, rutas de chat/adjuntos incluidas |
+| Frontend público                                        | Desplegado y probado   | [Aplicación](https://nexo-web-ferotuc.onrender.com) en Render Free                                               |
+| Backend público                                         | Desplegado y probado   | [Salud de API y PostgreSQL](https://nexo-api-ferotuc.onrender.com/api/health)                                    |
+| GitHub: código, README, tecnologías y arquitectura      | Disponible             | [Repositorio](https://github.com/Ferotuc/nexo-social), README y `docs/ARQUITECTURA-PUBLICA.md`                   |
+| GitHub: variables de ejemplo y migraciones              | Disponible             | `.env.example` y `apps/api/drizzle/`; sin credenciales reales                                                    |
+| PDF con identidad, arquitectura, tecnologías y capturas | Generado localmente    | `output/pdf/Nexo-Proyecto-Final.pdf`; no se publica el carné en GitHub                                           |
+| PDF con enlaces a repositorio, frontend, backend y API  | Incluido               | Enlaces clicables en el informe de entrega                                                                       |
+| Entrega del PDF en Canvas antes del 31 de octubre       | A cargo del estudiante | El despliegue y el PDF no equivalen a subir la tarea a Canvas                                                    |
 
 ## Criterios de evaluación
 

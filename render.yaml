@@ -3,7 +3,7 @@ databases:
     databaseName: nexo
     user: nexo
     plan: free
-    postgresMajorVersion: "17"
+    postgresMajorVersion: '17'
     ipAllowList: []
 services:
   - type: web
@@ -14,13 +14,13 @@ services:
     healthCheckPath: /api/health
     envVars:
       - key: DATABASE_URL
-        fromDatabase: {name: nexo-db, property: connectionString}
+        fromDatabase: { name: nexo-db, property: connectionString }
       - key: NODE_ENV
         value: production
       - key: COOKIE_SECURE
-        value: "true"
+        value: 'true'
       - key: TRUST_PROXY
-        value: "true"
+        value: 'true'
       - key: WEB_ORIGIN
         sync: false
       - key: API_PUBLIC_URL

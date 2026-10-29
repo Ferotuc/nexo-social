@@ -1,9 +1,49 @@
-export type User={id:string;username:string;displayName:string;bio?:string;createdAt?:string;email?:string;postsCount?:number;followersCount?:number;followingCount?:number;isFollowing?:boolean};
-export type Attachment={id:string;name:string;mime:string;size:number};
-export type Post={id:string;body:string;createdAt:string;author:User;likesCount:number;commentsCount:number;liked:boolean;attachments?:Attachment[]};
-export type Contact=User&{online:boolean;unread:number;lastMessage:string|null;lastAt:string|null};
-export type Message={id:string;senderId:string;recipientId:string;body:string;createdAt:string;readAt:string|null;attachments:Attachment[]};
-export type History={person:User&{online:boolean};items:Message[];hasMore:boolean};
-export type Comment={id:string;body:string;createdAt:string;author:User};
-export type Notice={id:string;type:'like'|'comment'|'follow';postId:string|null;readAt:string|null;createdAt:string;actor:User};
-export type Feed={items:Post[];page:number;hasMore:boolean};
+export type User = {
+  id: string;
+  username: string;
+  displayName: string;
+  bio?: string;
+  createdAt?: string;
+  email?: string;
+  postsCount?: number;
+  followersCount?: number;
+  followingCount?: number;
+  isFollowing?: boolean;
+};
+export type Attachment = { id: string; name: string; mime: string; size: number };
+export type Post = {
+  id: string;
+  body: string;
+  createdAt: string;
+  author: User;
+  likesCount: number;
+  commentsCount: number;
+  liked: boolean;
+  attachments?: Attachment[];
+};
+export type Contact = User & {
+  online: boolean;
+  unread: number;
+  lastMessage: string | null;
+  lastAt: string | null;
+};
+export type Message = {
+  id: string;
+  senderId: string;
+  recipientId: string;
+  body: string;
+  createdAt: string;
+  readAt: string | null;
+  attachments: Attachment[];
+};
+export type History = { person: User & { online: boolean }; items: Message[]; hasMore: boolean };
+export type Comment = { id: string; body: string; createdAt: string; author: User };
+export type Notice = {
+  id: string;
+  type: 'like' | 'comment' | 'follow';
+  postId: string | null;
+  readAt: string | null;
+  createdAt: string;
+  actor: User;
+};
+export type Feed = { items: Post[]; page: number; hasMore: boolean };

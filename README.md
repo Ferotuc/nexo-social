@@ -8,16 +8,16 @@ La interfaz usa una identidad azul con fondos claros, tarjetas de mayor legibili
 
 ## Estado y accesos
 
-| Recurso | Dirección | Estado |
-|---|---|---|
-| Código fuente | https://github.com/Ferotuc/nexo-social | Repositorio del proyecto |
-| Frontend local | http://localhost:3100 | Ejecución local |
-| Backend local | http://localhost:4100/api/health | Ejecución local |
-| Swagger local | http://localhost:4100/api/docs | Documentación interactiva |
-| OpenAPI JSON | http://localhost:4100/api/openapi.json | Contrato generado por NestJS |
-| Frontend público | https://nexo-web-ferotuc.onrender.com | HTTPS verificado |
-| Backend público | https://nexo-api-ferotuc.onrender.com/api/health | API y PostgreSQL verificados |
-| Swagger público | https://nexo-api-ferotuc.onrender.com/api/docs | Documentación pública |
+| Recurso          | Dirección                                        | Estado                       |
+| ---------------- | ------------------------------------------------ | ---------------------------- |
+| Código fuente    | https://github.com/Ferotuc/nexo-social           | Repositorio del proyecto     |
+| Frontend local   | http://localhost:3100                            | Ejecución local              |
+| Backend local    | http://localhost:4100/api/health                 | Ejecución local              |
+| Swagger local    | http://localhost:4100/api/docs                   | Documentación interactiva    |
+| OpenAPI JSON     | http://localhost:4100/api/openapi.json           | Contrato generado por NestJS |
+| Frontend público | https://nexo-web-ferotuc.onrender.com            | HTTPS verificado             |
+| Backend público  | https://nexo-api-ferotuc.onrender.com/api/health | API y PostgreSQL verificados |
+| Swagger público  | https://nexo-api-ferotuc.onrender.com/api/docs   | Documentación pública        |
 
 Desplegado el 29 de octubre de 2026 en Render: frontend y backend Docker separados, más PostgreSQL 17 administrado. Los tres recursos usan Free. La base gratuita caduca el **28 de noviembre de 2026**; los servicios pueden suspenderse por inactividad. Abrir frontend y API antes de presentar. Las direcciones localhost son una alternativa local.
 
@@ -94,16 +94,16 @@ La API aplica las migraciones al arrancar. PostgreSQL usa el volumen `nexo_data`
 
 ## Variables de entorno
 
-| Variable | Uso |
-|---|---|
-| DATABASE_URL | Conexión PostgreSQL; secreto solo del backend |
-| POSTGRES_USER / POSTGRES_PASSWORD / POSTGRES_DB | Inicialización de PostgreSQL local |
-| API_PORT o PORT | Puerto del backend; PORT tiene prioridad en cloud |
-| WEB_ORIGIN | Orígenes frontend permitidos, separados por coma, sin `/` final |
-| API_PUBLIC_URL | Origen público propio del backend para permitir Swagger desde su dominio |
-| API_INTERNAL_URL | Dirección del backend vista por Next.js; también se usa al compilar las reglas de proxy |
-| COOKIE_SECURE | `false` solo con HTTP local; `true` con HTTPS en producción |
-| TRUST_PROXY | `true` detrás de un único proxy de confianza, como Render |
+| Variable                                        | Uso                                                                                     |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------- |
+| DATABASE_URL                                    | Conexión PostgreSQL; secreto solo del backend                                           |
+| POSTGRES_USER / POSTGRES_PASSWORD / POSTGRES_DB | Inicialización de PostgreSQL local                                                      |
+| API_PORT o PORT                                 | Puerto del backend; PORT tiene prioridad en cloud                                       |
+| WEB_ORIGIN                                      | Orígenes frontend permitidos, separados por coma, sin `/` final                         |
+| API_PUBLIC_URL                                  | Origen público propio del backend para permitir Swagger desde su dominio                |
+| API_INTERNAL_URL                                | Dirección del backend vista por Next.js; también se usa al compilar las reglas de proxy |
+| COOKIE_SECURE                                   | `false` solo con HTTP local; `true` con HTTPS en producción                             |
+| TRUST_PROXY                                     | `true` detrás de un único proxy de confianza, como Render                               |
 
 `.env` no se sube a Git. El frontend no recibe DATABASE_URL ni credenciales. Al cambiar API_INTERNAL_URL en alojamiento, reconstruir el frontend para actualizar el proxy.
 
@@ -136,19 +136,19 @@ Los archivos cargados pero no enviados solo son visibles para su propietario; se
 
 Abrir `/api/docs` en frontend o backend y `/api/openapi.json` para el contrato. Incluye autenticación, usuarios, publicaciones, comentarios, interacciones, notificaciones, salud y SSE. Login/registro establecen cookie HttpOnly; Swagger permite probar acciones autenticadas desde ese mismo origen sin copiar tokens.
 
-| Grupo | Operaciones |
-|---|---|
-| Autenticación | POST `/api/auth/register`, `/login`, `/logout`; GET `/api/auth/me` |
-| Usuarios | GET `/api/users?q=`, GET `/api/users/:username`, PATCH `/api/users/me` |
-| Seguimiento | POST/DELETE `/api/users/:id/follow` |
-| Publicaciones | GET/POST `/api/posts`, GET/DELETE `/api/posts/:id` |
-| Feed | GET `/api/posts?feed=general`, `?feed=following`, `?username=...`, `&page=2` |
-| Likes | PUT/DELETE `/api/posts/:id/like` |
-| Comentarios | GET/POST `/api/posts/:id/comments`, DELETE `/api/comments/:id` |
-| Notificaciones | GET `/api/notifications`, PATCH `/api/notifications/read` |
-| Tiempo real | GET `/api/events` autenticado, `text/event-stream` |
-| Chat privado | GET `/api/chat/contacts`, GET/POST `/api/chat/:id/messages`, PATCH `/api/chat/:id/read` |
-| Archivos | POST `/api/attachments` (multipart), GET/DELETE `/api/attachments/:id` |
+| Grupo          | Operaciones                                                                             |
+| -------------- | --------------------------------------------------------------------------------------- |
+| Autenticación  | POST `/api/auth/register`, `/login`, `/logout`; GET `/api/auth/me`                      |
+| Usuarios       | GET `/api/users?q=`, GET `/api/users/:username`, PATCH `/api/users/me`                  |
+| Seguimiento    | POST/DELETE `/api/users/:id/follow`                                                     |
+| Publicaciones  | GET/POST `/api/posts`, GET/DELETE `/api/posts/:id`                                      |
+| Feed           | GET `/api/posts?feed=general`, `?feed=following`, `?username=...`, `&page=2`            |
+| Likes          | PUT/DELETE `/api/posts/:id/like`                                                        |
+| Comentarios    | GET/POST `/api/posts/:id/comments`, DELETE `/api/comments/:id`                          |
+| Notificaciones | GET `/api/notifications`, PATCH `/api/notifications/read`                               |
+| Tiempo real    | GET `/api/events` autenticado, `text/event-stream`                                      |
+| Chat privado   | GET `/api/chat/contacts`, GET/POST `/api/chat/:id/messages`, PATCH `/api/chat/:id/read` |
+| Archivos       | POST `/api/attachments` (multipart), GET/DELETE `/api/attachments/:id`                  |
 
 El feed devuelve hasta 15 publicaciones por página; comentarios hasta 100 por publicación y notificaciones las 50 más recientes. La búsqueda descubre hasta 12 personas por consulta. Errores coherentes: 400 datos inválidos, 401 sin sesión, 403 sin permiso, 404 inexistente, 409 duplicado, 413 tamaño excedido y 429 exceso de solicitudes.
 
@@ -161,6 +161,17 @@ Los likes y seguimientos son idempotentes. Cada mutación social y su notificaci
 El bus SSE es de una sola instancia. Para escalar el backend a varias réplicas hay que agregar un bus compartido (Redis Pub/Sub o equivalente). Un reinicio puede perder la emisión en tránsito, pero no la notificación persistida; al reconectar se recupera desde REST. El chat envía acciones mediante REST y recibe avisos privados por SSE; el indicador de presencia es aproximado y usa conexiones activas de una sola instancia.
 
 ## Pruebas y evidencia
+
+### Formato del código
+
+Prettier está configurado en la raíz para TypeScript, TSX, JavaScript, CSS, JSON, YAML y Markdown. Las reglas están en `.prettierrc.json`; `.editorconfig` mantiene UTF-8, finales LF y sangría consistente. Se excluyen secretos, dependencias, compilaciones, migraciones generadas y evidencias.
+
+```powershell
+npm run format        # Aplicar formato
+npm run format:check  # Verificar sin modificar archivos
+```
+
+GitHub Actions ejecuta la verificación de formato antes de compilar. Para formatear al guardar en VS Code, instala la extensión oficial de Prettier, selecciónala como formateador predeterminado y activa Format On Save.
 
 Con PostgreSQL, frontend y API activos:
 

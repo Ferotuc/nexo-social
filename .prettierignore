@@ -1,0 +1,21 @@
+# Dependencies and builds
+node_modules/
+**/node_modules/
+**/.next/
+**/dist/
+coverage/
+*.tsbuildinfo
+
+# Local data, secrets and delivery artifacts
+.env*
+.local/
+data/
+output/
+tmp/
+*.log
+
+# Generated files and recorded evidence
+package-lock.json
+apps/web/next-env.d.ts
+apps/api/drizzle/
+docs/evidence/

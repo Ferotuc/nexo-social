@@ -25,11 +25,11 @@ La entrada HTTPS representa el proxy y los certificados que proporciona la plata
 
 ### Tres componentes alojados
 
-| Componente | Alojamiento | Responsabilidad |
-|---|---|---|
-| Frontend Next.js | Web Service Free con `apps/web/Dockerfile` | HTML renderizado en servidor, React, interfaz y proxy `/api` |
-| Backend NestJS | Web Service Free con `apps/api/Dockerfile` | Autenticación, reglas, REST, Swagger y flujo SSE |
-| PostgreSQL 17 | Render Postgres Free | Usuarios, sesiones, publicaciones, interacciones y notificaciones |
+| Componente       | Alojamiento                                | Responsabilidad                                                   |
+| ---------------- | ------------------------------------------ | ----------------------------------------------------------------- |
+| Frontend Next.js | Web Service Free con `apps/web/Dockerfile` | HTML renderizado en servidor, React, interfaz y proxy `/api`      |
+| Backend NestJS   | Web Service Free con `apps/api/Dockerfile` | Autenticación, reglas, REST, Swagger y flujo SSE                  |
+| PostgreSQL 17    | Render Postgres Free                       | Usuarios, sesiones, publicaciones, interacciones y notificaciones |
 
 El frontend requiere un servicio que ejecute código de servidor porque utiliza SSR y un proxy; no se desplegará como una página estática.
 
@@ -43,15 +43,15 @@ Se agregó chat privado y adjuntos pequeños sin incorporar servicios adicionale
 
 ## Configuración de producción
 
-| Servicio | Variable | Valor o procedencia |
-|---|---|---|
-| API | `DATABASE_URL` | Conexión interna configurada en Render; secreto fuera del código |
-| API | `WEB_ORIGIN` | Origen HTTPS real del frontend, sin barra final |
-| API | `API_PUBLIC_URL` | Origen HTTPS real del backend, sin barra final |
-| API | `NODE_ENV` | `production` |
-| API | `COOKIE_SECURE` | `true` |
-| API | `TRUST_PROXY` | `true`, con el proxy de Render |
-| Frontend | `API_INTERNAL_URL` | URL HTTPS real de la API; disponible en build y runtime |
+| Servicio | Variable           | Valor o procedencia                                              |
+| -------- | ------------------ | ---------------------------------------------------------------- |
+| API      | `DATABASE_URL`     | Conexión interna configurada en Render; secreto fuera del código |
+| API      | `WEB_ORIGIN`       | Origen HTTPS real del frontend, sin barra final                  |
+| API      | `API_PUBLIC_URL`   | Origen HTTPS real del backend, sin barra final                   |
+| API      | `NODE_ENV`         | `production`                                                     |
+| API      | `COOKIE_SECURE`    | `true`                                                           |
+| API      | `TRUST_PROXY`      | `true`, con el proxy de Render                                   |
+| Frontend | `API_INTERNAL_URL` | URL HTTPS real de la API; disponible en build y runtime          |
 
 En este despliegue, `API_INTERNAL_URL` apunta a la URL HTTPS pública de la API Free. No apunta al hostname privado de otro web service gratuito: Render indica que los web services Free no reciben tráfico de su red privada. PostgreSQL sí puede recibir las conexiones internas permitidas desde la API.
 
@@ -61,19 +61,19 @@ El despliegue actual usa PostgreSQL 17 y tiene todas las conexiones externas blo
 
 ## Relación con los requisitos del proyecto
 
-| Requisito académico | Cómo lo cubre Nexo |
-|---|---|
-| Cliente-servidor con separación | Dos servicios y dos carpetas: Next.js y NestJS |
-| API REST | Endpoints `/api/auth`, `/api/users`, `/api/posts`, interacciones y notificaciones |
-| Base relacional y migraciones | PostgreSQL y tres migraciones versionadas con Drizzle |
-| Registro, sesión y seguridad | scrypt, sesión revocable, cookies, DTO, permisos y control de origen |
-| Feed, perfil y publicaciones | Interfaz responsive con datos reales y SSR |
-| Interacciones sociales | Likes, comentarios, seguimiento y chat privado |
-| Tiempo real | SSE autenticado y recuperación de notificaciones persistidas |
-| Documentación pública | Backend HTTPS + `/api/docs` y `/api/openapi.json` |
-| Contenedores | Dockerfile para cada aplicación |
-| Despliegue público | Frontend, API y Swagger HTTPS verificados en Render |
-| PDF y README con enlaces | URLs reales y capturas del despliegue público |
+| Requisito académico             | Cómo lo cubre Nexo                                                                |
+| ------------------------------- | --------------------------------------------------------------------------------- |
+| Cliente-servidor con separación | Dos servicios y dos carpetas: Next.js y NestJS                                    |
+| API REST                        | Endpoints `/api/auth`, `/api/users`, `/api/posts`, interacciones y notificaciones |
+| Base relacional y migraciones   | PostgreSQL y tres migraciones versionadas con Drizzle                             |
+| Registro, sesión y seguridad    | scrypt, sesión revocable, cookies, DTO, permisos y control de origen              |
+| Feed, perfil y publicaciones    | Interfaz responsive con datos reales y SSR                                        |
+| Interacciones sociales          | Likes, comentarios, seguimiento y chat privado                                    |
+| Tiempo real                     | SSE autenticado y recuperación de notificaciones persistidas                      |
+| Documentación pública           | Backend HTTPS + `/api/docs` y `/api/openapi.json`                                 |
+| Contenedores                    | Dockerfile para cada aplicación                                                   |
+| Despliegue público              | Frontend, API y Swagger HTTPS verificados en Render                               |
+| PDF y README con enlaces        | URLs reales y capturas del despliegue público                                     |
 
 ## Recorrido para reproducir el despliegue
 
