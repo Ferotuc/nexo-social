@@ -26,6 +26,7 @@ import {
   ProfileDto,
   FeedQuery,
   SearchQuery,
+  UpdatePostDto,
 } from './dto';
 import { settings } from './config';
 import { ChatService } from './chat.service';
@@ -134,6 +135,17 @@ export class SocialController {
   @ApiOperation({ summary: 'Consultar una publicación' })
   async post(@Param('id', new ParseUUIDPipe()) id: string, @Req() req: Request) {
     return this.social.post(id, (await this.social.viewer(req, false))?.id || null);
+  }
+  @Patch('posts/:id')
+  @ApiTags('Publicaciones')
+  @ApiOperation({ summary: 'Actualizar el texto de una publicación propia' })
+  @ApiResponse({ status: 403, description: 'La publicación pertenece a otra persona' })
+  async updatePost(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Req() req: Request,
+    @Body() dto: UpdatePostDto,
+  ) {
+    return this.social.updatePost(await this.social.requireViewer(req), id, dto.body);
   }
   @Delete('posts/:id')
   @HttpCode(204)

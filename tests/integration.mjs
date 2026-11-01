@@ -151,7 +151,15 @@ test('Nexo: integración con PostgreSQL real y dos usuarios', async (t) => {
       assert.match(new TextDecoder().decode(first.value), /connected/);
     });
     await t.test('like idempotente y notificación en tiempo real', async () => {
-      const next = reader.read();
+      const next = (async () => {
+        let text = '';
+        for (;;) {
+          const chunk = await reader.read();
+          if (chunk.done) throw new Error('La conexión SSE terminó antes de la notificación.');
+          text += new TextDecoder().decode(chunk.value);
+          if (text.includes('notifications.changed')) return { value: Buffer.from(text) };
+        }
+      })();
       const r = await req(`/posts/${postId}/like`, { method: 'PUT', cookie: b.cookie });
       assert.equal(r.status, 200);
       assert.equal(r.body.likesCount, 1);
@@ -204,6 +212,47 @@ test('Nexo: integración con PostgreSQL real y dos usuarios', async (t) => {
       assert.equal(
         (await req(`/comments/${commentId}`, { method: 'DELETE', cookie: b.cookie })).status,
         204,
+      );
+    });
+    await t.test('actualización de publicación con validación y permisos', async () => {
+      const updated = await req(`/posts/${postId}`, {
+        method: 'PATCH',
+        cookie: a.cookie,
+        body: { body: 'Publicación actualizada S12' },
+      });
+      assert.equal(updated.status, 200);
+      assert.equal(updated.body.id, postId);
+      assert.equal(updated.body.body, 'Publicación actualizada S12');
+      assert.equal((await req(`/posts/${postId}`)).body.body, 'Publicación actualizada S12');
+      assert.equal(
+        (
+          await req(`/posts/${postId}`, {
+            method: 'PATCH',
+            cookie: b.cookie,
+            body: { body: 'No permitido' },
+          })
+        ).status,
+        403,
+      );
+      assert.equal(
+        (
+          await req(`/posts/${postId}`, {
+            method: 'PATCH',
+            cookie: a.cookie,
+            body: { body: '  ' },
+          })
+        ).status,
+        400,
+      );
+      assert.equal(
+        (
+          await req(`/posts/${postId}`, {
+            method: 'PATCH',
+            cookie: a.cookie,
+            body: { body: 'Texto', authorId: b.id },
+          })
+        ).status,
+        400,
       );
     });
     await t.test('editar perfil y marcar notificaciones leídas', async () => {

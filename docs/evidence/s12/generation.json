@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-11-01T02:14:34.471Z",
+  "command": "drizzle-kit generate --schema <esquema TypeScript> --out <carpeta temporal> --dialect postgresql",
+  "stages": [
+    {
+      "name": "melodic_hex",
+      "stdout": "6 tables\ncomments 5 columns 1 indexes 2 fks\nfollows 3 columns 1 indexes 2 fks\nlikes 3 columns 1 indexes 2 fks\nposts 4 columns 2 indexes 1 fks\nsessions 5 columns 2 indexes 1 fks\nusers 7 columns 0 indexes 0 fks\n\n[✓] Your SQL migration file ➜ .local\\s12-generation-wfFEoJ\\drizzle\\0000_melodic_hex.sql 🚀\n"
+    },
+    {
+      "name": "slippery_leper_queen",
+      "stdout": "7 tables\ncomments 5 columns 1 indexes 2 fks\nfollows 3 columns 1 indexes 2 fks\nlikes 3 columns 1 indexes 2 fks\nnotifications 7 columns 1 indexes 3 fks\nposts 4 columns 2 indexes 1 fks\nsessions 5 columns 2 indexes 1 fks\nusers 7 columns 0 indexes 0 fks\n\n[✓] Your SQL migration file ➜ .local\\s12-generation-wfFEoJ\\drizzle\\0001_slippery_leper_queen.sql 🚀\n"
+    }
+  ],
+  "sqlMatchesRepository": true
+}

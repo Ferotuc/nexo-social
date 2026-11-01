@@ -172,6 +172,16 @@ export class SocialService implements OnModuleDestroy {
     this.events.emit('feed', { type: 'feed.changed', postId: p.id });
     return this.post(p.id, user.id);
   }
+  async updatePost(user: Viewer, id: string, body: string) {
+    const current = await this.post(id, user.id);
+    if (current.author.id !== user.id) {
+      throw new ForbiddenException('Solo puedes actualizar tus publicaciones.');
+    }
+    await this.query('UPDATE posts SET body=$2 WHERE id=$1 AND author_id=$3', [id, body, user.id]);
+    const updated = await this.post(id, user.id);
+    this.events.emit('feed', { type: 'post.changed', postId: id });
+    return updated;
+  }
   async deletePost(user: Viewer, id: string) {
     const p = await this.post(id, user.id);
     if (p.author.id !== user.id)

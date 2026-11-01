@@ -1,0 +1,117 @@
+{
+  "checkedAt": "2026-11-01T02:17:35.747Z",
+  "base": "http://127.0.0.1:4100/api",
+  "postId": "dcd132a1-1091-4a55-9f6c-ea2eaba46fb9",
+  "expectedBody": "Publicación actualizada S12 y conservada en PostgreSQL",
+  "operations": [
+    {
+      "title": "Crear publicación",
+      "method": "POST",
+      "path": "/posts",
+      "status": 201,
+      "request": {
+        "body": "Prueba de persistencia S12 antes del reinicio"
+      },
+      "response": {
+        "id": "dcd132a1-1091-4a55-9f6c-ea2eaba46fb9",
+        "body": "Prueba de persistencia S12 antes del reinicio",
+        "createdAt": "2026-11-01T02:17:35.479Z",
+        "author": {
+          "id": "e361e33d-133e-4896-86e6-d2af4bda3a7a",
+          "username": "s12_mvx79o5m",
+          "displayName": "Prueba S12"
+        },
+        "likesCount": 0,
+        "commentsCount": 0,
+        "liked": false,
+        "attachments": []
+      }
+    },
+    {
+      "title": "Consultar por identificador",
+      "method": "GET",
+      "path": "/posts/dcd132a1-1091-4a55-9f6c-ea2eaba46fb9",
+      "status": 200,
+      "response": {
+        "id": "dcd132a1-1091-4a55-9f6c-ea2eaba46fb9",
+        "body": "Prueba de persistencia S12 antes del reinicio",
+        "createdAt": "2026-11-01T02:17:35.479Z",
+        "author": {
+          "id": "e361e33d-133e-4896-86e6-d2af4bda3a7a",
+          "username": "s12_mvx79o5m",
+          "displayName": "Prueba S12"
+        },
+        "likesCount": 0,
+        "commentsCount": 0,
+        "liked": false,
+        "attachments": []
+      }
+    },
+    {
+      "title": "Listar publicaciones",
+      "method": "GET",
+      "path": "/posts?username=s12_mvx79o5m",
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "dcd132a1-1091-4a55-9f6c-ea2eaba46fb9",
+            "body": "Prueba de persistencia S12 antes del reinicio",
+            "createdAt": "2026-11-01T02:17:35.479Z",
+            "author": {
+              "id": "e361e33d-133e-4896-86e6-d2af4bda3a7a",
+              "username": "s12_mvx79o5m",
+              "displayName": "Prueba S12"
+            },
+            "likesCount": 0,
+            "commentsCount": 0,
+            "liked": false,
+            "attachments": []
+          }
+        ],
+        "page": 1,
+        "hasMore": false
+      }
+    },
+    {
+      "title": "Actualizar publicación",
+      "method": "PATCH",
+      "path": "/posts/dcd132a1-1091-4a55-9f6c-ea2eaba46fb9",
+      "status": 200,
+      "request": {
+        "body": "Publicación actualizada S12 y conservada en PostgreSQL"
+      },
+      "response": {
+        "id": "dcd132a1-1091-4a55-9f6c-ea2eaba46fb9",
+        "body": "Publicación actualizada S12 y conservada en PostgreSQL",
+        "createdAt": "2026-11-01T02:17:35.479Z",
+        "author": {
+          "id": "e361e33d-133e-4896-86e6-d2af4bda3a7a",
+          "username": "s12_mvx79o5m",
+          "displayName": "Prueba S12"
+        },
+        "likesCount": 0,
+        "commentsCount": 0,
+        "liked": false,
+        "attachments": []
+      }
+    },
+    {
+      "title": "Rechazar texto vacío",
+      "method": "PATCH",
+      "path": "/posts/dcd132a1-1091-4a55-9f6c-ea2eaba46fb9",
+      "status": 400,
+      "request": {
+        "body": "   "
+      },
+      "response": {
+        "statusCode": 400,
+        "message": [
+          "body must be longer than or equal to 1 characters"
+        ],
+        "path": "/api/posts/dcd132a1-1091-4a55-9f6c-ea2eaba46fb9",
+        "timestamp": "2026-11-01T02:17:35.706Z"
+      }
+    }
+  ]
+}

@@ -109,6 +109,8 @@ La API aplica las migraciones al arrancar. PostgreSQL usa el volumen `nexo_data`
 
 ## Datos y migraciones
 
+La entrega específica de **S12 Migraciones con Drizzle ORM**, con CRUD de publicaciones y evidencias reproducibles, está documentada en [docs/S12-MIGRACIONES.md](docs/S12-MIGRACIONES.md).
+
 Tablas: `users`, `sessions`, `posts`, `comments`, `likes`, `follows`, `notifications`, `messages` y `attachments`.
 
 - Migración `0000`: usuarios, sesiones, publicaciones e interacciones, con unicidad de email/usuario y pares like/seguimiento; prohíbe auto-seguimiento.
@@ -141,7 +143,7 @@ Abrir `/api/docs` en frontend o backend y `/api/openapi.json` para el contrato. 
 | Autenticación  | POST `/api/auth/register`, `/login`, `/logout`; GET `/api/auth/me`                      |
 | Usuarios       | GET `/api/users?q=`, GET `/api/users/:username`, PATCH `/api/users/me`                  |
 | Seguimiento    | POST/DELETE `/api/users/:id/follow`                                                     |
-| Publicaciones  | GET/POST `/api/posts`, GET/DELETE `/api/posts/:id`                                      |
+| Publicaciones  | GET/POST `/api/posts`, GET/PATCH/DELETE `/api/posts/:id`                                |
 | Feed           | GET `/api/posts?feed=general`, `?feed=following`, `?username=...`, `&page=2`            |
 | Likes          | PUT/DELETE `/api/posts/:id/like`                                                        |
 | Comentarios    | GET/POST `/api/posts/:id/comments`, DELETE `/api/comments/:id`                          |

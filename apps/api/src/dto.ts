@@ -63,6 +63,13 @@ export class PostDto {
   attachmentIds?: string[];
 }
 export class MessageDto extends PostDto {}
+export class UpdatePostDto {
+  @ApiProperty({ maxLength: 2000, example: 'Publicación actualizada para la tarea S12.' })
+  @Transform(trim)
+  @IsString()
+  @Length(1, 2000)
+  body!: string;
+}
 export class MessageQuery {
   @ApiPropertyOptional({ description: 'Cursor de mensaje anterior para cargar historial' })
   @IsOptional()

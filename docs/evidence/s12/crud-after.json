@@ -1,0 +1,47 @@
+{
+  "checkedAt": "2026-11-01T02:18:46.418Z",
+  "samePostId": "dcd132a1-1091-4a55-9f6c-ea2eaba46fb9",
+  "sameBody": "Publicación actualizada S12 y conservada en PostgreSQL",
+  "preservedAfterRestart": true,
+  "operations": [
+    {
+      "title": "Consultar tras reinicio",
+      "method": "GET",
+      "path": "/posts/dcd132a1-1091-4a55-9f6c-ea2eaba46fb9",
+      "status": 200,
+      "response": {
+        "id": "dcd132a1-1091-4a55-9f6c-ea2eaba46fb9",
+        "body": "Publicación actualizada S12 y conservada en PostgreSQL",
+        "createdAt": "2026-11-01T02:17:35.479Z",
+        "author": {
+          "id": "e361e33d-133e-4896-86e6-d2af4bda3a7a",
+          "username": "s12_mvx79o5m",
+          "displayName": "Prueba S12"
+        },
+        "likesCount": 0,
+        "commentsCount": 0,
+        "liked": false,
+        "attachments": []
+      }
+    },
+    {
+      "title": "Eliminar publicación propia",
+      "method": "DELETE",
+      "path": "/posts/dcd132a1-1091-4a55-9f6c-ea2eaba46fb9",
+      "status": 204,
+      "response": null
+    },
+    {
+      "title": "Consultar registro eliminado",
+      "method": "GET",
+      "path": "/posts/dcd132a1-1091-4a55-9f6c-ea2eaba46fb9",
+      "status": 404,
+      "response": {
+        "statusCode": 404,
+        "message": "La publicación no existe.",
+        "path": "/api/posts/dcd132a1-1091-4a55-9f6c-ea2eaba46fb9",
+        "timestamp": "2026-11-01T02:18:46.417Z"
+      }
+    }
+  ]
+}

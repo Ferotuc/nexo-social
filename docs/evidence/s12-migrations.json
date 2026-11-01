@@ -1,0 +1,24 @@
+{
+  "checkedAt": "2026-11-01T02:14:36.168Z",
+  "steps": [
+    {
+      "stage": "initial",
+      "migrations": 1,
+      "postId": "450ff419-506f-4e57-ad00-618a84f35d3f",
+      "body": "Este dato debe sobrevivir a la segunda migración"
+    },
+    {
+      "stage": "evolution",
+      "migrations": 2,
+      "postId": "450ff419-506f-4e57-ad00-618a84f35d3f",
+      "preserved": true,
+      "addedTable": "notifications"
+    },
+    {
+      "stage": "current",
+      "migrations": 3,
+      "preserved": true,
+      "repeatedWithoutDuplicates": true
+    }
+  ]
+}
